@@ -1,14 +1,20 @@
--- Путь к core/plugins.lua
-local core_plugins = vim.fn.stdpath("config") .. "/lua/core/plugins.lua"
-
--- Проверка, что файл с плагинами существует
-if vim.fn.filereadable(core_plugins) == 0 then
-  vim.api.nvim_err_writeln("Не найден файл core/plugins.lua")
-  return
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.uv.fs_stat(lazypath) then
+  print("Installing lazy.nvim...")
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "--branch=stable",
+    "https://github.com/folke/lazy.nvim.git",
+    lazypath,
+  })
   end
+  vim.opt.rtp:prepend(lazypath)
 
-require("core.settings")
-require("core.keymaps")
-require("lazy").setup(require("core.plugins"))
-pcall(require, "godot.init")
-pcall(require, "go.init")
+  require("core.keymaps")
+  require("core.settings")
+  require("lazy").setup("core.plugins")
+
+  pcall(require, "godot.init")
+  pcall(require, "go.init")
