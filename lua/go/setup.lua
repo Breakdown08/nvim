@@ -29,6 +29,22 @@ if _G.is_go_project then
         map("n", "<leader>gf", ":%GoImport<CR>", "Import: Add all missing imports")
         map("n", "<leader>gd", ":GoDoc<CR>", "Docs: Show documentation")
         map("n", "<leader>gc", ":GoCoverageToggle<CR>", "Coverage: Toggle coverage")
+        -- 📂 Перейти в корень проекта в NERDTree
+        vim.api.nvim_create_user_command("GoProjectRoot", function()
+        if vim.fn.exists(":NERDTree") == 0 then
+            vim.notify("NERDTree not available", vim.log.levels.WARN)
+            return
+            end
+
+            if not _G.go_project_path then
+                vim.notify("Godot project path not set!", vim.log.levels.ERROR)
+                return
+                end
+
+                vim.cmd("NERDTreeClose")
+                vim.cmd("NERDTree " .. _G.go_project_path)
+                end, {})
+        vim.keymap.set("n", "<leader>pr", ":GoProjectRoot<CR>")
 
         -- 📝 Buffer-local options
         vim.api.nvim_buf_set_option(bufnr, "expandtab", true)
