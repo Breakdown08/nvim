@@ -1,0 +1,11 @@
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+*.undo
+lazy-lock.json
+
+# System files
+.DS_Store
+Thumbs.db
